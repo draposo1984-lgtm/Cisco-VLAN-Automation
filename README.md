@@ -46,7 +46,7 @@ A aplicação realiza:
 ### VLANs Implementadas
 
 | VLAN | Nome |
-|--------|--------|
+| ------ | ------ |
 | 10 | VLAN_DADOS |
 | 20 | VLAN_VOZ |
 | 50 | VLAN_SEGURANCA |
@@ -103,7 +103,7 @@ Execute a aplicação:
 python app.py
 ```
 
-Acesse:
+Acesse pelo navegador:
 
 ```text
 http://127.0.0.1:5000
@@ -149,44 +149,16 @@ docs/Automacao_VPN.md
 
 ---
 
-# Ferramentas Avaliadas para Automação da VPN
-
-## Fortinet
-
-- REST API
-- SSH
-- FortiManager
-
-## Palo Alto
-
-- REST API
-- XML API
-- SSH
-- Panorama
-
-## Bibliotecas Python
-
-- requests
-- netmiko
-- paramiko
-
----
-
 # Controle de Versões
 
-O projeto utiliza Git para rastrear todas as alterações realizadas durante o desenvolvimento.
+O projeto utiliza Git para rastrear as alterações realizadas durante o desenvolvimento.
 
-Exemplos de commits:
+Histórico atual de commits:
 
 ```text
-Projeto inicial Flask
-Implementação da automação de VLANs
-Configuração automática do hostname
-Criação das VLANs 10, 20 e 50
-Implementação do backup das configurações
-Melhorias na interface web
-Adição da documentação da automação VPN IPSec
-Atualização final do README
+Adicionado README do projeto
+Implementada automacao de switch Cisco
+Adicionada documentacao da automacao VPN IPSec
 ```
 
 Para visualizar o histórico:
