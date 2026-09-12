@@ -1,0 +1,207 @@
+Building configuration...
+
+Current configuration : 4509 bytes
+!
+version 12.2
+no service pad
+service timestamps debug uptime
+service timestamps log uptime
+no service password-encryption
+!
+hostname SWITCH_AUTOMATIZADO
+!
+!
+username admin privilege 15 secret 5 $1$mErO$53P/Q/s6TnIwFlDncFaPt.
+no aaa new-model
+switch 1 provision ws-c3750-48p
+system mtu routing 1526
+vtp mode transparent
+ip subnet-zero
+ip domain-name daniel.local
+!
+ip ssh version 2
+!
+!
+crypto pki trustpoint TP-self-signed-1189022720
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-1189022720
+ revocation-check none
+ rsakeypair TP-self-signed-1189022720
+!
+!
+crypto pki certificate chain TP-self-signed-1189022720
+ certificate self-signed 01
+  308202BB 30820224 A0030201 02020101 300D0609 2A864886 F70D0101 04050030 
+  62312F30 2D060355 04031326 494F532D 53656C66 2D536967 6E65642D 43657274 
+  69666963 6174652D 31313839 30323237 3230312F 302D0609 2A864886 F70D0109 
+  02162053 57495443 485F4155 544F4D41 54495A41 444F2E64 616E6965 6C2E6C6F 
+  63616C30 1E170D39 33303330 31303030 3130365A 170D3230 30313031 30303030 
+  30305A30 62312F30 2D060355 04031326 494F532D 53656C66 2D536967 6E65642D 
+  43657274 69666963 6174652D 31313839 30323237 3230312F 302D0609 2A864886 
+  F70D0109 02162053 57495443 485F4155 544F4D41 54495A41 444F2E64 616E6965 
+  6C2E6C6F 63616C30 819F300D 06092A86 4886F70D 01010105 0003818D 00308189 
+  02818100 DA4168B1 28EC899F 8EBE32E8 95E3BBBC B3649E7F 337D5C64 066161C7 
+  65874257 BAD9FD57 EEAF65CF 736839DA 6632BEC0 C0621E7F E549699D 1BE51346 
+  68235026 2E608B5A AEE5C25F 3833FDD2 6D17D6F7 F092BE28 26A853C2 402079E7 
+  4628962A 90E56F4E B9359718 B49865BC 6EADC4EA 1434FAAF 78471B9F B5D1F819 
+  D110CEE1 02030100 01A38180 307E300F 0603551D 130101FF 04053003 0101FF30 
+  2B060355 1D110424 30228220 53574954 43485F41 55544F4D 4154495A 41444F2E 
+  64616E69 656C2E6C 6F63616C 301F0603 551D2304 18301680 14599B7C 78E994F4 
+  4D51BD92 C738BA36 76B1E035 BD301D06 03551D0E 04160414 599B7C78 E994F44D 
+  51BD92C7 38BA3676 B1E035BD 300D0609 2A864886 F70D0101 04050003 81810023 
+  3B55E0B1 EAD357B7 941F288D BAEFD44C 146E1D28 B44F4789 D012E416 9D917177 
+  87EBDD3D 2770C368 496E1D6E 895FC660 24E9D063 646A0974 7109796C 3A58D02A 
+  ACDAAFD0 30E8BE74 52294B5F 81F4232F D7D3482D A1192331 3013D1C3 D17579EE 
+  C78DECE3 CC18F23B DB8A6B3D 255E589A 1864BA55 BC186E7E F0E68081 C9C84F
+  quit
+!
+!
+no file verify auto
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+vlan 10
+ name VLAN_DADOS
+!
+vlan 20
+ name VLAN_VOZ
+!
+vlan 50
+ name VLAN_SEGURANCA
+!
+vlan 100
+ name GERENCIA
+!
+interface FastEthernet1/0/1
+ description USER
+ switchport access vlan 100
+ switchport mode access
+!
+interface FastEthernet1/0/2
+!
+interface FastEthernet1/0/3
+!
+interface FastEthernet1/0/4
+!
+interface FastEthernet1/0/5
+!
+interface FastEthernet1/0/6
+!
+interface FastEthernet1/0/7
+!
+interface FastEthernet1/0/8
+!
+interface FastEthernet1/0/9
+!
+interface FastEthernet1/0/10
+!
+interface FastEthernet1/0/11
+!
+interface FastEthernet1/0/12
+!
+interface FastEthernet1/0/13
+!
+interface FastEthernet1/0/14
+!
+interface FastEthernet1/0/15
+!
+interface FastEthernet1/0/16
+!
+interface FastEthernet1/0/17
+!
+interface FastEthernet1/0/18
+!
+interface FastEthernet1/0/19
+!
+interface FastEthernet1/0/20
+!
+interface FastEthernet1/0/21
+!
+interface FastEthernet1/0/22
+!
+interface FastEthernet1/0/23
+!
+interface FastEthernet1/0/24
+!
+interface FastEthernet1/0/25
+!
+interface FastEthernet1/0/26
+!
+interface FastEthernet1/0/27
+!
+interface FastEthernet1/0/28
+!
+interface FastEthernet1/0/29
+!
+interface FastEthernet1/0/30
+!
+interface FastEthernet1/0/31
+!
+interface FastEthernet1/0/32
+!
+interface FastEthernet1/0/33
+!
+interface FastEthernet1/0/34
+!
+interface FastEthernet1/0/35
+!
+interface FastEthernet1/0/36
+!
+interface FastEthernet1/0/37
+!
+interface FastEthernet1/0/38
+!
+interface FastEthernet1/0/39
+!
+interface FastEthernet1/0/40
+!
+interface FastEthernet1/0/41
+!
+interface FastEthernet1/0/42
+!
+interface FastEthernet1/0/43
+!
+interface FastEthernet1/0/44
+!
+interface FastEthernet1/0/45
+!
+interface FastEthernet1/0/46
+!
+interface FastEthernet1/0/47
+!
+interface FastEthernet1/0/48
+!
+interface GigabitEthernet1/0/1
+!
+interface GigabitEthernet1/0/2
+!
+interface GigabitEthernet1/0/3
+!
+interface GigabitEthernet1/0/4
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+interface Vlan100
+ description GERENCIA
+ ip address 10.10.1.1 255.255.255.0
+!
+ip classless
+ip http server
+ip http secure-server
+!
+!
+control-plane
+!
+!
+line con 0
+line vty 0 4
+ login local
+ transport input ssh
+line vty 5 15
+ login
+!
+end
