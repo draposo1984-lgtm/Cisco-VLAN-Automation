@@ -1,5 +1,8 @@
 from flask import Flask, render_template, request
 from netmiko import ConnectHandler
+from datetime import datetime
+import os
+import time
 
 app = Flask(__name__)
 
@@ -15,13 +18,7 @@ def index():
             username = request.form["username"]
             password = request.form["password"]
 
-            print(f"Conectando ao switch {ip}")
-
             hostname = request.form["hostname"]
-
-            print("Conectado com sucesso!")
-
-            print("CHEGUEI AQUI")
 
             vlan_id_1 = request.form["vlan_id_1"]
             vlan_nome_1 = request.form["vlan_nome_1"]
@@ -41,33 +38,34 @@ def index():
 
             conn = ConnectHandler(**switch)
 
-	    # Altera hostname primeiro
-
+            # Altera o hostname
             conn.send_config_set([
-
-            f"hostname {hostname}"
+                f"hostname {hostname}"
             ])
 
-            # Atualiza o prompt após mudança
+            # Atualiza o prompt do Netmiko
+            time.sleep(1)
+            conn.set_base_prompt()
 
-            conn.find_prompt()
-
+            # Criação das VLANs
             comandos = [
-            f"vlan {vlan_id_1}",
-            f"name {vlan_nome_1}",
+                f"vlan {vlan_id_1}",
+                f"name {vlan_nome_1}",
 
-            f"vlan {vlan_id_2}",
-            f"name {vlan_nome_2}",
+                f"vlan {vlan_id_2}",
+                f"name {vlan_nome_2}",
 
-            f"vlan {vlan_id_3}",	
-            f"name {vlan_nome_3}"
-]
+                f"vlan {vlan_id_3}",
+                f"name {vlan_nome_3}"
+            ]
 
-            resultado = conn.send_config_set(comandos)
+            conn.send_config_set(comandos)
 
+            # Salva na NVRAM
             conn.save_config()
 
-            from datetime import datetime
+            # Backup
+            os.makedirs("backup", exist_ok=True)
 
             backup = conn.send_command("show running-config")
 
@@ -75,34 +73,93 @@ def index():
 
             data_hora = datetime.now().strftime("%Y%m%d_%H%M%S")
 
-            nome_arquivo = f"backup/{hostname_switch}_{data_hora}.txt"
+            nome_arquivo = (
+                f"backup/{hostname_switch}_{data_hora}.txt"
+            )
 
             with open(nome_arquivo, "w", encoding="utf-8") as arquivo:
                 arquivo.write(backup)
 
+            # ==========================
+            # VALIDAÇÃO
+            # ==========================
+
+            validacao = []
+
+            # Validação do hostname
+            hostname_configurado = conn.find_prompt().replace("#", "")
+
+            if hostname_configurado == hostname:
+                validacao.append("✅ Hostname configurado corretamente")
+            else:
+                validacao.append(
+                    f"⚠️ ALERTA: Hostname esperado '{hostname}' "
+                    f"mas encontrado '{hostname_configurado}'"
+                )
+
+            # Validação das VLANs
+            vlans = conn.send_command("show vlan brief")
+
+            if vlan_nome_1 in vlans:
+                validacao.append(
+                    f"✅ VLAN {vlan_id_1} ({vlan_nome_1}) encontrada"
+                )
+            else:
+                validacao.append(
+                    f"⚠️ ALERTA: VLAN {vlan_id_1} não encontrada"
+                )
+
+            if vlan_nome_2 in vlans:
+                validacao.append(
+                    f"✅ VLAN {vlan_id_2} ({vlan_nome_2}) encontrada"
+                )
+            else:
+                validacao.append(
+                    f"⚠️ ALERTA: VLAN {vlan_id_2} não encontrada"
+                )
+
+            if vlan_nome_3 in vlans:
+                validacao.append(
+                    f"✅ VLAN {vlan_id_3} ({vlan_nome_3}) encontrada"
+                )
+            else:
+                validacao.append(
+                    f"⚠️ ALERTA: VLAN {vlan_id_3} não encontrada"
+                )
+
             conn.disconnect()
 
-            resultado = f""" 
-       ✅ Configuração aplicada com sucesso!
+            resultado = f"""
+✅ Configuração aplicada com sucesso!
 
-       ✅ Configuração salva na NVRAM com sucesso!
+✅ Configuração salva na NVRAM!
 
-       ✅ Backup realizado com sucesso!
+✅ Backup realizado com sucesso!
 
-  Arquivo gerado:
-  {nome_arquivo}
- 
-  Hostname: {hostname}
+Arquivo gerado:
+{nome_arquivo}
 
-  VLAN {vlan_id_1}: {vlan_nome_1}
+Hostname:
+{hostname}
 
-  VLAN {vlan_id_2}: {vlan_nome_2}
+VLAN {vlan_id_1}: {vlan_nome_1}
+VLAN {vlan_id_2}: {vlan_nome_2}
+VLAN {vlan_id_3}: {vlan_nome_3}
 
-  VLAN {vlan_id_3}: {vlan_nome_3}
-  """
-            
+==========================
+VALIDAÇÃO
+==========================
+
+{chr(10).join(validacao)}
+"""
+
         except Exception as erro:
-            resultado = f"ERRO: {erro}"
+
+            resultado = f"""
+❌ ERRO
+
+{erro}
+"""
 
     return render_template(
         "index.html",
